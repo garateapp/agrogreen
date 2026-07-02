@@ -1,0 +1,7 @@
+
+Warning: PHP Startup: Unable to load dynamic library 'pdo_sqlsrv_83_ts_x64' (tried: ext\pdo_sqlsrv_83_ts_x64 (No se puede encontrar el módulo especificado), ext\php_pdo_sqlsrv_83_ts_x64.dll (No se puede encontrar el módulo especificado)) in Unknown on line 0
+
+Warning: PHP Startup: Unable to load dynamic library 'php_sqlsrv_83_ts_x64' (tried: ext\php_sqlsrv_83_ts_x64 (No se puede encontrar el módulo especificado), ext\php_php_sqlsrv_83_ts_x64.dll (No se puede encontrar el módulo especificado)) in Unknown on line 0
+
+Warning: PHP Startup: Unable to load dynamic library 'C:\Program Files\Herd\resources\app.asar.unpacked\resources\bin\phpsqlsrv\php_sqlsrv_83_ts_x64.dll' (tried: C:\Program Files\Herd\resources\app.asar.unpacked\resources\bin\phpsqlsrv\php_sqlsrv_83_ts_x64.dll (No se puede encontrar el módulo especificado), ext\php_C:\Program Files\Herd\resources\app.asar.unpacked\resources\bin\phpsqlsrv\php_sqlsrv_83_ts_x64.dll.dll (No se puede encontrar el módulo especificado)) in Unknown on line 0
+   InvalidArgumentException  Unexpected end of input.
