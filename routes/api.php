@@ -21,10 +21,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/cosechas', [CosechaController::class, 'storeCosecha']);
     Route::get('/cosechas', [CosechaController::class, 'indexCosechas']);
     Route::get('/contenedores-cosecha', [CosechaController::class, 'listarContenedores']);
-    Route::get('/cuarteles', [CosechaController::class, 'listarCuarteles']);
+    Route::get('/cosecha/cuarteles', [CosechaController::class, 'listarCuarteles']);
     Route::get('/tarjetas-activas', [CosechaController::class, 'listarTarjetasActivas']);
 
-    // Cuarteles
+    // Cuarteles (mobile)
     Route::get('/cuarteles', [CuartelController::class, 'index']);
 
     // Tarjetas y Asistencia (mobile)

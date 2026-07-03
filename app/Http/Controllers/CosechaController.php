@@ -171,7 +171,8 @@ class CosechaController extends Controller
 
     public function listarCuarteles(): JsonResponse
     {
-        $cuarteles = Cuartel::orderBy('nombre')
+        $cuarteles = Cuartel::with('especie')
+            ->orderBy('nombre')
             ->get(['id', 'nombre', 'especie_id']);
 
         return response()->json($cuarteles);

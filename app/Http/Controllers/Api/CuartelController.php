@@ -20,7 +20,14 @@ class CuartelController extends Controller
         }
 
         $cuarteles = $query->orderBy('nombre')
-            ->get(['id', 'nombre', 'centro_costo_id', 'especie_id']);
+            ->get(['id', 'nombre', 'centro_costo_id', 'especie_id'])
+            ->map(fn ($c) => [
+                'id' => $c->id,
+                'nombre' => $c->nombre,
+                'centro_costo_id' => $c->centro_costo_id,
+                'especie_id' => $c->especie_id,
+                'especie_nombre' => $c->especie?->nombre,
+            ]);
 
         return response()->json($cuarteles);
     }
