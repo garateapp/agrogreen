@@ -52,13 +52,33 @@ class TarjetaController extends Controller
             'empleado_id' => 'required|uuid|exists:empleados,id',
         ]);
 
+        $user = auth()->user();
         $tarjeta = Tarjeta::where('codigo_qr', $request->codigo_qr)->firstOrFail();
         $empleado = Empleado::findOrFail($request->empleado_id);
 
-        $tarjeta->assignTo($empleado, auth()->id());
+        $tarjeta->assignTo($empleado, $user->id);
+
+        $registro = DB::transaction(function () use ($tarjeta, $request, $user) {
+            $faena = FaenaRegistro::create([
+                'tenant_id' => $user->tenant_id,
+                'fecha' => today()->toDateString(),
+                'actividad_id' => null,
+                'centro_costo_id' => null,
+                'supervisor_id' => $user->id,
+            ]);
+
+            FaenaEmpleado::create([
+                'faena_registro_id' => $faena->id,
+                'empleado_id' => $tarjeta->empleado_id,
+                'horas_trabajadas' => 0,
+                'liquido_a_pagar' => 0,
+            ]);
+
+            return $faena;
+        });
 
         return response()->json([
-            'message' => 'Tarjeta asignada correctamente',
+            'message' => 'Tarjeta asignada y asistencia registrada',
             'tarjeta' => [
                 'id' => $tarjeta->id,
                 'codigo_qr' => $tarjeta->codigo_qr,
@@ -67,6 +87,10 @@ class TarjetaController extends Controller
                     'nombre' => $empleado->nombre,
                     'apellido' => $empleado->apellido,
                 ],
+            ],
+            'faena' => [
+                'id' => $registro->id,
+                'fecha' => $registro->fecha,
             ],
         ]);
     }
