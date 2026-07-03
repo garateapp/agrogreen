@@ -132,14 +132,8 @@ class TarjetaController extends Controller
 
     public function actividades(Request $request): JsonResponse
     {
-        $user = auth()->user();
-        $query = Actividad::where('presupuestable', true);
-
-        if ($agrupador = $user->getAgrupadorFilter()) {
-            $query->whereHas('faenasRegistros', fn ($q) => $q->whereHas('centroCosto', fn ($cq) => $cq->where('agrupador', $agrupador)));
-        }
-
-        $actividades = $query->orderBy('nombre')
+        $actividades = Actividad::where('presupuestable', true)
+            ->orderBy('nombre')
             ->get(['id', 'nombre', 'tipo_labor']);
 
         return response()->json($actividades);
@@ -147,14 +141,8 @@ class TarjetaController extends Controller
 
     public function empleados(Request $request): JsonResponse
     {
-        $user = auth()->user();
-        $query = Empleado::where('activo', true);
-
-        if ($agrupador = $user->getAgrupadorFilter()) {
-            $query->whereHas('faenaEmpleados.faenaRegistro', fn ($q) => $q->whereHas('centroCosto', fn ($cq) => $cq->where('agrupador', $agrupador)));
-        }
-
-        $empleados = $query->orderBy('nombre')
+        $empleados = Empleado::where('activo', true)
+            ->orderBy('nombre')
             ->get(['id', 'nombre', 'apellido', 'rut']);
 
         return response()->json($empleados);
