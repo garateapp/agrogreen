@@ -34,4 +34,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/asistencia/sync', [TarjetaController::class, 'sync']);
     Route::get('/actividades', [TarjetaController::class, 'actividades']);
     Route::get('/empleados', [TarjetaController::class, 'empleados']);
+    Route::get('/asistencias', [TarjetaController::class, 'asistencias']);
+    Route::patch('/asistencias/faena', [TarjetaController::class, 'actualizarFaena']);
 });

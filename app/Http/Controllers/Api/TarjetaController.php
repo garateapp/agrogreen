@@ -154,6 +154,29 @@ class TarjetaController extends Controller
         ]);
     }
 
+    public function actualizarFaena(Request $request): JsonResponse
+    {
+        $request->validate([
+            'faena_id' => 'required|uuid|exists:faenas_registro,id',
+            'actividad_id' => 'required|uuid|exists:actividades,id',
+            'cuarteles_ids' => 'nullable|array',
+            'cuarteles_ids.*' => 'uuid|exists:cuartels,id',
+        ]);
+
+        $user = auth()->user();
+        $faena = FaenaRegistro::where('id', $request->faena_id)
+            ->where('supervisor_id', $user->id)
+            ->firstOrFail();
+
+        $faena->update(['actividad_id' => $request->actividad_id]);
+
+        if ($request->cuarteles_ids) {
+            $faena->cuarteles()->sync($request->cuarteles_ids);
+        }
+
+        return response()->json(['message' => 'Jornada actualizada correctamente']);
+    }
+
     public function actividades(Request $request): JsonResponse
     {
         $actividades = Actividad::where('presupuestable', true)
@@ -161,6 +184,24 @@ class TarjetaController extends Controller
             ->get(['id', 'nombre', 'tipo_labor']);
 
         return response()->json($actividades);
+    }
+
+    public function asistencias(Request $request): JsonResponse
+    {
+        $user = auth()->user();
+        $fecha = $request->fecha ?? today()->toDateString();
+
+        $registros = FaenaRegistro::with([
+            'faenaEmpleados.empleado:id,nombre,apellido,rut',
+            'actividad:id,nombre,tipo_labor',
+            'cuarteles:id,nombre',
+        ])
+            ->whereDate('fecha', $fecha)
+            ->where('supervisor_id', $user->id)
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return response()->json($registros);
     }
 
     public function empleados(Request $request): JsonResponse
